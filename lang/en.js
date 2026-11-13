@@ -12,7 +12,7 @@ window.promoStrings.en = {
   timeLeft: "{time} left",
 
   drawTitle: "Enter the draw for a free entry",
-  drawInfo: "One winner gets a free race entry. We’ll call the winner on 15 December.",
+  drawInfo: "The winner gets a free race entry.",
   labelName: "Name",
   labelPhone: "Phone",
   labelEmail: "Email",

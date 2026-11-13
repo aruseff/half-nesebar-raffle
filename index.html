@@ -53,9 +53,20 @@
 
   .top { position: fixed; top: 0; left: 0; right: 0; z-index: 2; padding-top: calc(var(--safe-top) + 4.75rem); pointer-events: none; }
 
-  .lang {
+  .corner {
     position: fixed; z-index: 5;
     top: calc(var(--safe-top) + 1rem); right: max(1.25rem, calc((100% - 44rem) / 2 + 1.25rem));
+    display: flex; align-items: center; gap: .45rem;
+  }
+  .social {
+    display: grid; place-items: center;
+    width: 2.45rem; height: 2.45rem; border-radius: 50%;
+    border: 1px solid var(--line);
+    background: rgba(var(--night), .55); color: var(--chalk);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  }
+  .social svg { width: 1.15rem; height: 1.15rem; }
+  .lang {
     display: flex; padding: .2rem; gap: .2rem;
     border: 1px solid var(--line); border-radius: 2rem;
     background: rgba(var(--night), .55);
@@ -147,6 +158,16 @@
   body.drawn .top, body.drawn .sound, body.drawn .bonus, body.drawn .track, body.drawn .play { display: none; }
   body.typing .dock { display: none; }
 
+  /* While the form is open, the register button becomes a small text link so it isn't confused
+     with "Enter the draw". After entering, the big button comes back. */
+  body.drawn:not(.entered) .dock { padding-top: .35rem; background: rgb(var(--night)); }
+  body.drawn:not(.entered) .register {
+    padding: .5rem; background: none; box-shadow: none;
+    color: var(--chalk-dim); font-size: .9375rem; font-weight: 600; font-stretch: 100%;
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  body.drawn:not(.entered) .draw { padding-bottom: calc(var(--safe-bottom) + 4.5rem); }
+
   .draw-name { margin: 0 0 1.5rem; font-stretch: 125%; font-weight: 850; font-size: 1.125rem; color: var(--sun); }
   .draw h2 { margin: 0; font-stretch: 115%; font-weight: 800; font-size: clamp(1.7rem, 7vw, 2.4rem); line-height: 1.05; }
   .draw-info { margin: .55rem 0 1.4rem; color: var(--chalk-dim); max-width: 34rem; }
@@ -192,9 +213,17 @@
 <div class="splash-bg" aria-hidden="true"></div>
 <img class="logo" data-logo src="logo-bg.avif" width="720" height="467" alt="">
 
-<div class="lang" role="group" aria-label="Език / Language">
-  <button type="button" data-lang="bg" lang="bg">БГ</button>
-  <button type="button" data-lang="en" lang="en">EN</button>
+<div class="corner">
+  <a class="social" href="https://www.facebook.com/5kmrunNesebar" target="_blank" rel="noopener" aria-label="Facebook">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21h3.1z"/></svg>
+  </a>
+  <a class="social" href="https://www.instagram.com/halfnesebar/" target="_blank" rel="noopener" aria-label="Instagram">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
+  </a>
+  <div class="lang" role="group" aria-label="Език / Language">
+    <button type="button" data-lang="bg" lang="bg">БГ</button>
+    <button type="button" data-lang="en" lang="en">EN</button>
+  </div>
 </div>
 
 <header class="top">
@@ -372,6 +401,7 @@
   }
 
   function showDone() {
+    document.body.classList.add("entered");
     byId("formView").hidden = true;
     byId("doneView").hidden = false;
   }
@@ -395,8 +425,8 @@
 
   tryPlay();
   (async () => {
-    await wait(1000);
-    await videoReady(800);
+    await wait(2000);
+    await videoReady(1500);
     video.currentTime = 0;
     watchedUntil = 0;
     document.body.classList.remove("splash");
